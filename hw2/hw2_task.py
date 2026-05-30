@@ -1,5 +1,5 @@
 import torch
-from torch.profiler import ProfilerActivity, profile
+from torch.profiler import ProfilerActivity, profile as torch_profile
 
 from utils import (
     build_model,
@@ -56,7 +56,7 @@ def profile(loop_fn, model, input_ids, trace_name: str):
     """Run a short profiled generation and save a Chrome trace."""
     trace_path = RESULTS_DIR / trace_name
     torch.cuda.synchronize()
-    with profile(
+    with torch_profile(
         activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
         record_shapes=True,
         profile_memory=False,
